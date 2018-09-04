@@ -1,0 +1,29 @@
+{
+	"default":
+	{
+		"redis-host":"127.0.0.1",
+		"redis-port":"6379",
+		"redis-password":"",
+		"redis-mode":"0",
+		"server-host":"127.0.0.1",
+		"server-username":"root",
+		"server-password":"sinosun"
+	},
+	
+	"servers":
+	[
+		{
+			"name":"测试"
+		}
+
+	],
+	
+	"concern":
+	{
+		"standalone":[""],
+		"sentinel":[""],
+		"slave":[""],
+		"master":[""],		
+		"cluster":[""]		
+	}
+}
