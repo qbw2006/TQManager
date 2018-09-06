@@ -20,7 +20,7 @@
 	
 	buildscript {
 		repositories {
-			maven { url "http://10.1.5.200:8081/nexus/content/groups/public/" }
+		//	maven { url "http://10.1.5.200:8081/nexus/content/groups/public/" }
 			jcenter()
 		}
 		dependencies {
@@ -35,15 +35,17 @@
 
 	dependencies  {
 		compile("org.springframework.boot:spring-boot-starter-thymeleaf")
-		compile("org.springframework.boot:spring-boot-starter-cache")
+		compile("org.springframework.boot:spring-boot-starter-data-redis")
+		testCompile("org.springframework.boot:spring-boot-starter-test")
 		compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
 		compile group: 'com.alibaba', name: 'fastjson', version: '1.2.39'
 		compile group: 'com.google.guava', name: 'guava', version: '18.0'
 		compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.6'
 		compile group: 'commons-io', name: 'commons-io', version: '2.6'
+		compile group: 'com.jcraft', name: 'jsch', version: '0.1.54'
 	}
 
-    String[] dbpDefaultJvmArgs = ["-Dspring.config.location=file:conf/bdp.properties"]
+    String[] dbpDefaultJvmArgs = ["-Dspring.config.location=file:conf/manage.properties"]
     List<String> projectJvmArgs = new ArrayList<String>();
     Collections.addAll(projectJvmArgs, dbpDefaultJvmArgs);
     applicationDefaultJvmArgs = projectJvmArgs

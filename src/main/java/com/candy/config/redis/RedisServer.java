@@ -1,11 +1,18 @@
 package com.candy.config.redis;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.CollectionUtils;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.google.common.collect.Sets;
 
 public class RedisServer 
 {
+	
 	@JSONField(name="name")
 	private String name;
 	
@@ -19,7 +26,7 @@ public class RedisServer
 	private String redisPassword;
 	
 	@JSONField(name="redis-mode")
-	private int redisMode = 0;
+	private List<String> redisMode;
 	
 	@JSONField(name="server-host")
 	private String serverHost;
@@ -30,11 +37,29 @@ public class RedisServer
 	@JSONField(name="server-password")
 	private String serverPassword;
 	
+	@JSONField(name="redis-bin-path")
+	private String redisBinPath;
 	
+	@JSONField(name="redis-config-path")
+	private String redisConfigPath;
+	
+	//根据redis的部署模式,concernKey中保存此redis需要关心的配置
+	private final Set<String> concernKey = Sets.newHashSet();
+	
+	
+	public void addConcernKey(Collection<String> key) {
+		 concernKey.addAll(key);
+	}
+
+
+	public Set<String> getConcernKey() {
+		return Sets.newHashSet(concernKey);
+	}
+
 	public boolean isCorrect()
 	{
 		if (StringUtils.isEmpty(name) || StringUtils.isEmpty(redisHost) ||
-				redisPort < 0  || redisMode < 0 ||
+				redisPort < 0  || CollectionUtils.isEmpty(redisMode) ||
 				StringUtils.isEmpty(serverHost) || StringUtils.isEmpty(serverUsername) || StringUtils.isEmpty(serverPassword))
 		{
 			return false;
@@ -42,10 +67,10 @@ public class RedisServer
 		return true;
 	}
 	
-	public int getRedisMode() {
+	public List<String> getRedisMode() {
 		return redisMode;
 	}
-	public void setRedisMode(int redisMode) {
+	public void setRedisMode(List<String> redisMode) {
 		this.redisMode = redisMode;
 	}
 	public String getServerHost() {
@@ -91,11 +116,53 @@ public class RedisServer
 		this.serverPassword = serverPassword;
 	}
 
+	public String getRedisBinPath() {
+		return redisBinPath;
+	}
+
+	public void setRedisBinPath(String redisBinPath) {
+		this.redisBinPath = redisBinPath;
+	}
+
+
+	public String getRedisConfigPath() {
+		return redisConfigPath;
+	}
+
+
+	public void setRedisConfigPath(String redisConfigPath) {
+		this.redisConfigPath = redisConfigPath;
+	}
+
+	
 	@Override
 	public String toString() {
 		return "RedisServer [name=" + name + ", redisHost=" + redisHost + ", redisPort=" + redisPort
 				+ ", redisPassword=" + redisPassword + ", redisMode=" + redisMode + ", serverHost=" + serverHost
-				+ ", serverUsername=" + serverUsername + ", serverPassword=" + serverPassword + "]";
+				+ ", serverUsername=" + serverUsername + ", serverPassword=" + serverPassword + ", redisBinPath="
+				+ redisBinPath + ", redisConfigPath=" + redisConfigPath + ", concernKey=" + concernKey + "]";
+	}
+
+
+	public String getStartCommand()
+	{
+		return redisBinPath + " " + redisConfigPath;
 	}
 	
+	public String getStopCommand()
+	{
+		return "pkill -9 " + getStartCommand();
+	}
+	
+
+	public String getId()
+	{
+		return redisHost + ":" + redisPort;
+	}
+
+	public String getServerInfo()
+	{
+		return "ServerInfo [serverHost=" + serverHost
+				+ ", serverUsername=" + serverUsername + ", serverPassword=" + serverPassword + "]";
+	}
 }

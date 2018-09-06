@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 
 @SpringBootApplication
-@PropertySource(value = { "file:conf/bdp.properties" }, encoding = "utf-8")
+@PropertySource(value = { "file:conf/manage.properties" }, encoding = "utf-8")
 @EnableScheduling
 public class TQManagerLauncher {
 
