@@ -1,5 +1,6 @@
 package com.candy.service.patrol;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -12,12 +13,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.jedis.JedisConnection;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSON;
 import com.candy.config.redis.RedisConfigResolver;
-import com.candy.config.redis.RedisServer;
+import com.candy.config.redis.RedisConfig;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
 
@@ -29,7 +31,7 @@ public class RedisPatroller
 	private static final Logger LOG = LoggerFactory.getLogger(RedisPatroller.class);
 	
 	@Autowired
-	private RedisTemplate<String, RedisResult> redisTemplate;
+	private StringRedisTemplate redisTemplate;
 	
 	@Autowired
 	private RedisConfigResolver rc;
@@ -39,7 +41,7 @@ public class RedisPatroller
 	@PostConstruct
 	public void init()
 	{
-		for (RedisServer rs : rc.getServerMap().values())
+		for (RedisConfig rs : rc.getServerMap().values())
 		{
 			Jedis j = new Jedis(rs.getRedisHost(), rs.getRedisPort());
 			if (!StringUtils.isEmpty(rs.getRedisPassword()))
@@ -61,7 +63,7 @@ public class RedisPatroller
 		
 		LOG.debug("check result = {}", result);
 		
-		result.forEach((k, v)->redisTemplate.opsForValue().set(k, v));
+		result.forEach((k, v)->redisTemplate.opsForValue().set(k, JSON.toJSONString(v)));
 	}
 
 	
@@ -82,6 +84,7 @@ public class RedisPatroller
 			rr.setRedisPort(rc.getServer(id).getRedisPort());
 			//返回格式是,分隔的字符串
 			rr.setRedisMode(Joiner.on(",").join(rc.getServer(id).getRedisMode()));
+			rr.setDate(new Date());
 			
 			try 
 			{

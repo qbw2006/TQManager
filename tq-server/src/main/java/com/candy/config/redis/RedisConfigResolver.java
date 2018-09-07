@@ -24,7 +24,7 @@ import com.google.common.collect.Maps;
 public class RedisConfigResolver {
 	private static final Logger LOG = LoggerFactory.getLogger(RedisConfigResolver.class);
 
-	private final Map<String, RedisServer> serverMap = Maps.newHashMap();
+	private final Map<String, RedisConfig> serverMap = Maps.newHashMap();
 
 	@PostConstruct
 	public void init() {
@@ -33,9 +33,9 @@ public class RedisConfigResolver {
 			String redisConf = FileUtils.readFileToString(f, Charsets.UTF_8);
 			JSONObject all = JSONObject.parseObject(redisConf);
 
-			RedisServer common = all.getObject("default", RedisServer.class);
+			RedisConfig common = all.getObject("default", RedisConfig.class);
 
-			List<RedisServer> servers = all.getJSONArray("servers").toJavaList(RedisServer.class);
+			List<RedisConfig> servers = all.getJSONArray("servers").toJavaList(RedisConfig.class);
 			
 			JSONObject concern = all.getJSONObject("concern");
 
@@ -54,20 +54,24 @@ public class RedisConfigResolver {
 		}
 	}
 
-	private static void check(List<RedisServer> servers) throws RedisConfigException {
+	private static void check(List<RedisConfig> servers) throws RedisConfigException {
 		if (servers == null) {
 			throw new RedisConfigException("配置为空");
 		}
 		
-		for (RedisServer r : servers) {
+		for (RedisConfig r : servers) {
+			//检查参数是否正确
 			if (!r.isCorrect()) {
 				throw new RedisConfigException("配置为错,错误配置：" + r.toString());
 			}
+			
+			//删除集合中的空字符串和Null
+			r.checkCollection();
 		}
 	}
 
-	private static void assemble(RedisServer common, List<RedisServer> servers, JSONObject concern) {
-		for (RedisServer r : servers) {
+	private static void assemble(RedisConfig common, List<RedisConfig> servers, JSONObject concern) {
+		for (RedisConfig r : servers) {
 			if (StringUtils.isEmpty(r.getRedisHost())) {
 				r.setRedisHost(common.getRedisHost());
 			}
@@ -99,16 +103,20 @@ public class RedisConfigResolver {
 			//装配redis的concernkey
 			for (String key : r.getRedisMode())
 			{
-				r.addConcernKey(concern.getJSONArray(key).toJavaList(String.class));
+				List<String> c = concern.getJSONArray(key).toJavaList(String.class);
+				if (!CollectionUtils.isEmpty(c))
+				{
+					r.addConcernKey(concern.getJSONArray(key).toJavaList(String.class));
+				}
 			}
 		}
 	}
 
-	public Map<String, RedisServer> getServerMap() {
+	public Map<String, RedisConfig> getServerMap() {
 		return serverMap;
 	}
 	
-	public RedisServer getServer(String id)
+	public RedisConfig getServer(String id)
 	{
 		return serverMap.get(id);
 	}

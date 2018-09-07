@@ -1,6 +1,6 @@
 package com.candy.service.manage;
 
-public class RedisTask {
+public class OperationTask {
 	
 	//0:stop 1:start
 	private int opertion;

@@ -10,8 +10,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.alibaba.fastjson.JSON;
+import com.candy.config.redis.RedisConfig;
 import com.candy.config.redis.RedisConfigResolver;
-import com.candy.config.redis.RedisServer;
 import com.google.common.base.Charsets;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
@@ -26,10 +27,12 @@ public class RedisReceiver {
 	@Autowired
 	private RedisConfigResolver rc;
 	
-	public void receiveMessage(RedisTask rt)
+	public void receiveMessage(String message)
 	{
+		OperationTask rt = JSON.parseObject(message, OperationTask.class);
+		
 		LOG.info("receive a operaton task = {} ", rt.toString());
-		RedisServer server = rc.getServer(rt.getId());
+		RedisConfig server = rc.getServer(rt.getId());
 		JSch js = new JSch();
 		try {
 			
@@ -39,7 +42,7 @@ public class RedisReceiver {
 			s.setConfig("StrictHostKeyChecking", "no");
 			s.connect();
 			
-			LOG.info("create a session . server info = {}", server.getServerInfo());
+			LOG.info("create a session. server info = {}", server.getServerInfo());
 			
 			//生成命令
 			String command = rt.getOpertion() == 0 ? server.getStopCommand():server.getStartCommand();
@@ -53,9 +56,10 @@ public class RedisReceiver {
 			
 		} catch (JSchException e) {
 			
-			LOG.error("connect host fail, server info = {}", server.getServerInfo(), e);
+			LOG.error("jsch [fail], server info = {}", server.getServerInfo(), e);
 			
 		} catch (IOException e) {
+			
 			LOG.error("io is error", e);
 		}
 	}

@@ -1,5 +1,6 @@
 package com.candy.service.patrol;
 
+import java.util.Date;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
@@ -12,6 +13,9 @@ public class RedisResult {
 	private int redisPort;
 	private String redisMode;
 	private boolean isAlive = false;
+	
+	private Date date;
+	
 	private Map<String, String> concern = Maps.newHashMap();
 	
 	public String getId() {
@@ -60,6 +64,18 @@ public class RedisResult {
 	
 	public void addConcern(String key, String value) {
 		this.concern.put(key, value);
+	}
+	
+	public Date getDate() {
+		return date;
+	}
+	public void setDate(Date date) {
+		this.date = date;
+	}
+	@Override
+	public String toString() {
+		return "RedisResult [id=" + id + ", name=" + name + ", redisHost=" + redisHost + ", redisPort=" + redisPort
+				+ ", redisMode=" + redisMode + ", isAlive=" + isAlive + ", date=" + date + ", concern=" + concern + "]";
 	}
 	
 }

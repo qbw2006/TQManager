@@ -3,7 +3,7 @@
 	apply plugin: 'eclipse'
 	apply plugin: 'org.springframework.boot'
 	
-	group 'com.sinosun.bdp'
+	group 'com.candy'
 	version '0.0.1'
 	sourceCompatibility = JavaVersion.VERSION_1_8
 	targetCompatibility = JavaVersion.VERSION_1_8
@@ -34,7 +34,7 @@
 	}
 
 	dependencies  {
-		compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+		compile("org.springframework.boot:spring-boot-starter-web")
 		compile("org.springframework.boot:spring-boot-starter-data-redis")
 		testCompile("org.springframework.boot:spring-boot-starter-test")
 		compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
@@ -50,7 +50,7 @@
     Collections.addAll(projectJvmArgs, dbpDefaultJvmArgs);
     applicationDefaultJvmArgs = projectJvmArgs
 
-	mainClassName = 'com.sinosun.bdp.GatewayServer'
+	mainClassName = 'com.candy.TQManagerLauncher'
 
 	applicationDistribution.from('conf') {
     	into "conf"

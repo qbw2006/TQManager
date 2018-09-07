@@ -1,6 +1,7 @@
 package com.candy.config.redis;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -10,7 +11,7 @@ import org.springframework.util.CollectionUtils;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.google.common.collect.Sets;
 
-public class RedisServer 
+public class RedisConfig 
 {
 	
 	@JSONField(name="name")
@@ -45,27 +46,6 @@ public class RedisServer
 	
 	//根据redis的部署模式,concernKey中保存此redis需要关心的配置
 	private final Set<String> concernKey = Sets.newHashSet();
-	
-	
-	public void addConcernKey(Collection<String> key) {
-		 concernKey.addAll(key);
-	}
-
-
-	public Set<String> getConcernKey() {
-		return Sets.newHashSet(concernKey);
-	}
-
-	public boolean isCorrect()
-	{
-		if (StringUtils.isEmpty(name) || StringUtils.isEmpty(redisHost) ||
-				redisPort < 0  || CollectionUtils.isEmpty(redisMode) ||
-				StringUtils.isEmpty(serverHost) || StringUtils.isEmpty(serverUsername) || StringUtils.isEmpty(serverPassword))
-		{
-			return false;
-		}
-		return true;
-	}
 	
 	public List<String> getRedisMode() {
 		return redisMode;
@@ -164,5 +144,35 @@ public class RedisServer
 	{
 		return "ServerInfo [serverHost=" + serverHost
 				+ ", serverUsername=" + serverUsername + ", serverPassword=" + serverPassword + "]";
+	}
+	
+	public void addConcernKey(Collection<String> key) {
+		 concernKey.addAll(key);
+	}
+
+
+	public Set<String> getConcernKey() {
+		return Sets.newHashSet(concernKey);
+	}
+
+	public boolean isCorrect()
+	{
+		if (StringUtils.isEmpty(name) || StringUtils.isEmpty(redisHost) ||
+				redisPort < 0  || CollectionUtils.isEmpty(redisMode) ||
+				StringUtils.isEmpty(serverHost) || StringUtils.isEmpty(serverUsername) || StringUtils.isEmpty(serverPassword))
+		{
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * 删除list和set中的空字符串
+	 */
+	public void checkCollection()
+	{
+		concernKey.removeAll(Collections.singleton(""));
+		concernKey.removeAll(Collections.singleton(null));
+		
 	}
 }
