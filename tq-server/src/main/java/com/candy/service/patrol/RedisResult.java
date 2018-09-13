@@ -3,6 +3,7 @@ package com.candy.service.patrol;
 import java.util.Date;
 import java.util.Map;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.google.common.collect.Maps;
 
 public class RedisResult {
@@ -12,8 +13,10 @@ public class RedisResult {
 	private String redisHost;
 	private int redisPort;
 	private String redisMode;
+	@JSONField(name = "isAlive")
 	private boolean isAlive = false;
 	
+	@JSONField(format="yyyy-MM-dd HH:mm:ss")
 	private Date date;
 	
 	private Map<String, String> concern = Maps.newHashMap();

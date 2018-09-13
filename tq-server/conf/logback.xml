@@ -1,37 +1,65 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<configuration scan="true" scanPeriod="60 seconds" debug="false">
-	<property name="LOG_HOME" value="log" />
-	<property name="PROJECT_NAME" value="GATEWAY" />
-	<property name="BUSINESS_LOGGER_NAME" value="com.sinosun.bdp" />
-	<property name="BUSINESS_LOGGER_FILE" value="bdp_gateway" />
-	<property name="OTHER_LOGGER_FILE" value="bdp_gateway_other" />
-	
-	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<pattern>1 %d{yyyy-MM-dd'T'HH:mm:ss.SSS} ${PROJECT_NAME} %file:%line %thread %level - b:%X{bid:-null} - %m%n</pattern>
-		</encoder>
-	</appender>
-	
-	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- For assistance related to logback-translator or configuration  -->
+<!-- files in general, please contact the logback user mailing list -->
+<!-- at http://www.qos.ch/mailman/listinfo/logback-user             -->
+<!--                                                                -->
+<!-- For professional support please see                            -->
+<!--    http://www.qos.ch/shop/products/professionalSupport         -->
+<!--                                                                -->
+<configuration scan="true" scanPeriod="30 seconds" debug="false">
+	<property name="sName" value="${system.name}" />
+    <contextName>${system.name}</contextName>
+	<property name="LOG_HOME" value="${user.dir}/log" />
+
+  <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+    	<pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSS} ${sName} %file:%line %thread C %level b:%X{bid:-Null} : %m%n</pattern>
+    </encoder>
+  </appender>
+  
+  <appender name="consoleFileLog"
+		class="ch.qos.logback.core.rolling.RollingFileAppender" >
+		<File>${LOG_HOME}/console.log</File>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<FileNamePattern>${LOG_HOME}/${BUSINESS_LOGGER_FILE}.%d{yyyy-MM-dd}.%i.log
+			<FileNamePattern>${LOG_HOME}/console.%d{yyyy-MM-dd}.%i
 			</FileNamePattern>
-			<MaxHistory>60</MaxHistory>
-			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+			<MaxHistory>30</MaxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<!-- or whenever the file size reaches 50MB -->
 				<maxFileSize>50MB</maxFileSize>
 			</timeBasedFileNamingAndTriggeringPolicy>
 		</rollingPolicy>
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<pattern>1 %d{yyyy-MM-dd'T'HH:mm:ss.SSS} ${PROJECT_NAME} %file:%line %thread %level - b:%X{bid:-null} - %m%n</pattern>
+			<pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSS} ${sName} %file:%line %thread C %level b:%X{bid:-Null} : %m%n</pattern>
 		</encoder>
 	</appender>
-	
-
-	<logger name="org.apache.commons.digester3" level="ERROR" />
+  
+  	<logger name="org" level="warn"/>
+	<logger name="java.sql" level="warn"/>
+	<logger name="com.mchange" level="warn"/>
+	<logger name="io.netty" level="warn"/>
+	 
 	<logger name="org.apache.commons.beanutils" level="ERROR" />
+	<logger name="org.dna.moquette.messaging.subscriptions" level="ERROR" />
 	<logger name="org.apache.zookeeper" level="ERROR" />
 
-    <root level="DEBUG">
-        <appender-ref ref="STDOUT" />
-    </root>
+
+	<logger name="SystemLog" level="debug" additivity="false">
+		<appender-ref ref="console"/>
+	</logger>
+	<logger name="DailyLog" level="debug" additivity="false">
+		<appender-ref ref="console"/>
+	</logger>
+	<logger name="ErrorLog" level="debug" additivity="false">
+		<appender-ref ref="console"/>
+	</logger>
+
+	<root level="debug">
+		<!--   控制台不输出到文件，以免nohup过大 -->
+		<!--<appender-ref ref="console"/>-->
+	</root>
+	
+	
 </configuration>

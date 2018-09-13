@@ -16,7 +16,7 @@ import com.candy.utils.JSONMessage;
 import com.candy.utils.TqLog;
 
 @RestController
-@RequestMapping("/qtManager/redis")
+@RequestMapping("/tqmanager/redis")
 public class RedisController {
 
 	@Autowired
@@ -27,20 +27,20 @@ public class RedisController {
 	{
 		List<RedisResult> res = rService.healthInfo();
 		
-		return JSONMessage.createSuccess().addData(JSONObject.parseObject(JSON.toJSONString(res))).toString();
+		JSONObject json = new JSONObject();
+		json.put("health", res);
+		
+		return JSONMessage.createSuccess().addData(json).toString();
 	}
 	
 	@RequestMapping(value= "/task", method = RequestMethod.POST)
-	public String pubRedisTask(JSONObject o)
+	public String pubRedisTask(OperationTask ot)
 	{
-		TqLog.getDailyLog().info("receive a opertaion, info = {}", o);
-		
-		OperationTask ot = JSONObject.toJavaObject(o, OperationTask.class);
-		
+		TqLog.getDailyLog().info("receive a task, task = {}", ot);
+
 		rService.pubRedisTask(ot);
+		return JSONMessage.createSuccess("创建任务成功，任务 = " + JSON.toJSONString(ot)).toString();
 		
-		return JSONMessage.createSuccess().toString();
 	}
-	
 	
 }

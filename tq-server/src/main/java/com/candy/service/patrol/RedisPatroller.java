@@ -9,8 +9,6 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.jedis.JedisConnection;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -18,8 +16,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
-import com.candy.config.redis.RedisConfigResolver;
 import com.candy.config.redis.RedisConfig;
+import com.candy.config.redis.RedisConfigResolver;
+import com.candy.utils.TqLog;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
 
@@ -28,7 +27,6 @@ import redis.clients.jedis.Jedis;
 @Service
 public class RedisPatroller 
 {
-	private static final Logger LOG = LoggerFactory.getLogger(RedisPatroller.class);
 	
 	@Autowired
 	private StringRedisTemplate redisTemplate;
@@ -53,7 +51,7 @@ public class RedisPatroller
 			connections.put(rs.getId(), f);
 		}
 		
-		LOG.info("redis client initial [successfully]");
+		TqLog.getDailyLog().info("RedisPatroller start [successfully]");
 	}
 	
 	@Scheduled(cron="${redis.schedule}") 
@@ -61,7 +59,7 @@ public class RedisPatroller
 	{
 		Map<String, RedisResult> result = checkRedis();
 		
-		LOG.debug("check result = {}", result);
+		TqLog.getDailyLog().debug("check result = {}", JSON.toJSONString(result));
 		
 		result.forEach((k, v)->redisTemplate.opsForValue().set(k, JSON.toJSONString(v)));
 	}
@@ -95,7 +93,7 @@ public class RedisPatroller
 				rr.setAlive(true);
 				
 			} catch (Exception e) {
-				LOG.error("redis id = {} is disconnect.", id);
+				TqLog.getErrorLog().error("redis id = {} is disconnect.", id);
 			}
 			
 			res.put(id, rr);
