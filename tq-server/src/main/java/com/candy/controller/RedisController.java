@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.candy.service.OperationTask;
 import com.candy.service.RedisService;
-import com.candy.service.manage.OperationTask;
 import com.candy.service.patrol.RedisResult;
 import com.candy.utils.JSONMessage;
 import com.candy.utils.TqLog;

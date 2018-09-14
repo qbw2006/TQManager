@@ -6,12 +6,13 @@
             :data="items"
             border
             stripe
-            style="width: 1051px">
+            @row-dblclick="detailInfo"
+            style="width: 931px">
             <el-table-column
               prop="id"
               label="id"
               align="center"
-              width="120">
+              width="150">
             </el-table-column>
             <el-table-column
               prop="name"
@@ -31,12 +32,6 @@
               align="center"              
               width="120">
             </el-table-column>
-            <el-table-column
-              prop="redisMode"
-              label="模式"
-              align="center"              
-              width="150">
-            </el-table-column>            
             <el-table-column 
                 prop="isAlive"
                 label="状态" 
@@ -70,6 +65,8 @@
 <script>
     
 import qs from 'qs'
+import $ from 'jquery'
+
 export default {
     name: 'Redis',
     data(){
@@ -83,7 +80,7 @@ export default {
         setInterval(myajax, 10000);
         function myajax() { 
             self.$http.get("/tqmanager/redis/health").then(function(res){
-              console.log(res.data.data)
+//            console.log(res.data.data)
               self.items = res.data.data.health;
             }).catch(function(err){
               console.log(err)
@@ -94,22 +91,37 @@ export default {
     
     methods:{
         handleClick(redis) {
-            var self = this;
             var data = {
                 opertion : redis.isAlive? 0:1,
                 id : redis.id
             };
-            var param = qs.stringify(data);
-            console.log("operation is " + param);
+            
             var params = new URLSearchParams();
-            params.append("opertion", redis.isAlive? 0:1);
+            params.append("opertion", redis.isAlive? 0:1)
             params.append("id",redis.id);
-            self.$http.post("/tqmanager/redis/task", params).then(function(res){
+            this.$http.post("/tqmanager/redis/task", params).then(function(res){
               console.log(res.data.rdesc)
             }).catch(function(err){
               console.log(err)
             })
-        }
+            //TODO 点击后10秒内不能再点,还没有实现
+            var click = event.target;
+            var parent = $(click).parent();
+            $(parent).addClass("is-disabled");
+            $(parent).attr("disabled", "disabled");
+        },
+        
+      detailInfo(row, event) {
+        this.$alert(row.info, '详细内容', {
+          confirmButtonText: '确定',
+          callback: action => {
+//          this.$message({
+//            type: 'info',
+//            message: `action: ${ action }`
+//          });
+          }
+        });
+      }
     },
     filters: {
         // el-tag类型转换

@@ -14,7 +14,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.candy.config.redis.RedisConfig;
 import com.candy.config.redis.RedisConfigResolver;
-import com.candy.service.manage.OperationTask;
 import com.candy.service.patrol.RedisResult;
 import com.candy.utils.TqLog;
 import com.google.common.base.Charsets;
@@ -65,7 +64,7 @@ public class RedisService {
 		try {
 			
 			//创建session
-			Session s = js.getSession(server.getServerUsername(), server.getServerHost());
+			Session s = js.getSession(server.getServerUsername(), server.getRedisHost());
 			s.setPassword(server.getServerPassword());
 			s.setConfig("StrictHostKeyChecking", "no");
 			s.connect();

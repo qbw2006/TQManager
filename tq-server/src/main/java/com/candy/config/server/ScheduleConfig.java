@@ -1,4 +1,4 @@
-package com.candy.service.patrol;
+package com.candy.config.server;
 
 import java.util.concurrent.Executors;
 

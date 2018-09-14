@@ -1,4 +1,4 @@
-package com.candy.service.manage;
+package com.candy.service;
 
 public class OperationTask {
 	

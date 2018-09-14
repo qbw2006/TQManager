@@ -1,29 +1,23 @@
 {
 	"default":
 	{
-		"redis-password":"",
-		//standalone,sentinel,slave,master,cluster
-		"redis-mode":["standalone", "master"],
-		"server-host":"127.0.0.1",
 		"server-username":"root",
-		"server-password":"sinosun"
+		"server-password":"123456",
+		
+		"redis-bin-path":"/usr/local/SINO/redis3/bin/redis-server",
+		"redis-config-path":"/usr/local/SINO/redis3/config/redis_6379.conf"
 	},
 	
 	"servers":
 	[
 		{
-			"name":"测试",
+			"name":"windows",
 			"redis-host":"127.0.0.1",
-			"redis-port":6379,
+		},
+		{
+			"name":"centos7-1",
+			"redis-host":"10.1.20.108",
+			"redis-password":"sinosun"
 		}
-	],
-	
-	"concern":
-	{
-		"standalone":["redis_version", "maxmemory", "connected_clients", "role"],
-		"sentinel":[""],
-		"slave":[""],
-		"master":[""],		
-		"cluster":["nodes"]		
-	}
+	]
 }

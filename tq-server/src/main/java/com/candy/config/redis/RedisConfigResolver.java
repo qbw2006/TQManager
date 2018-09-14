@@ -64,9 +64,6 @@ public class RedisConfigResolver {
 			if (!r.isCorrect()) {
 				throw new RedisConfigException("配置为错,错误配置：" + r.toString());
 			}
-			
-			//删除集合中的空字符串和Null
-			r.checkCollection();
 		}
 	}
 
@@ -84,14 +81,6 @@ public class RedisConfigResolver {
 				r.setRedisPassword(common.getRedisPassword());
 			}
 
-			if (CollectionUtils.isEmpty(r.getRedisMode())) {
-				r.setRedisMode(common.getRedisMode());
-			}
-
-			if (StringUtils.isEmpty(r.getServerPassword())) {
-				r.setServerHost(common.getServerHost());
-			}
-
 			if (StringUtils.isEmpty(r.getServerPassword())) {
 				r.setServerPassword(common.getServerPassword());
 			}
@@ -100,14 +89,12 @@ public class RedisConfigResolver {
 				r.setServerUsername(common.getServerUsername());
 			}
 			
-			//装配redis的concernkey
-			for (String key : r.getRedisMode())
-			{
-				List<String> c = concern.getJSONArray(key).toJavaList(String.class);
-				if (!CollectionUtils.isEmpty(c))
-				{
-					r.addConcernKey(concern.getJSONArray(key).toJavaList(String.class));
-				}
+			if (StringUtils.isEmpty(r.getRedisBinPath())) {
+				r.setRedisBinPath(common.getRedisBinPath());
+			}
+			
+			if (StringUtils.isEmpty(r.getRedisConfigPath())) {
+				r.setRedisConfigPath(common.getRedisConfigPath());
 			}
 		}
 	}
