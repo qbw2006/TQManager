@@ -59,7 +59,17 @@
             </el-table-column>
           </el-table>    
       </el-main>
+        <el-dialog width="551px" title="详细信息" :visible.sync="dialogTableVisible">
+          <el-table :data="detail">
+            <el-table-column align="center" prop="key" label="key" width="250"></el-table-column>
+            <el-table-column align="center" prop="value" label="value" width="250"></el-table-column>
+          </el-table>
+        </el-dialog>
+      
     </el-container>
+    
+
+    
 </template>
 
 <script>
@@ -71,7 +81,9 @@ export default {
     name: 'Redis',
     data(){
         return {
-          items:[]          
+          items:[],
+          dialogTableVisible: false,
+          detail:[]
         }
     },
     
@@ -111,17 +123,10 @@ export default {
             $(parent).attr("disabled", "disabled");
         },
         
-      detailInfo(row, event) {
-        this.$alert(row.info, '详细内容', {
-          confirmButtonText: '确定',
-          callback: action => {
-//          this.$message({
-//            type: 'info',
-//            message: `action: ${ action }`
-//          });
-          }
-        });
-      }
+        detailInfo(row, event) {
+            this.dialogTableVisible = true;
+            this.detail = row.info;
+        }
     },
     filters: {
         // el-tag类型转换
