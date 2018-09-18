@@ -1,36 +1,32 @@
-package com.candy.config.redis;
+package com.candy.dao;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.validator.constraints.NotBlank;
 
-import com.alibaba.fastjson.annotation.JSONField;
-
-public class RedisConfig 
+public class RedisServerEntity 
 {
-	
-	@JSONField(name="name")
+	@NotBlank
 	private String name;
 	
-	@JSONField(name="redis-host")
+	@NotBlank
 	private String redisHost;
 	
-	@JSONField(name="redis-port")
 	private int redisPort = 6379;
 	
-	@JSONField(name="redis-password")
+	@NotBlank
 	private String redisPassword;
 	
-	@JSONField(name="server-username")
+	@NotBlank
 	private String serverUsername;
 	
-	@JSONField(name="server-password")
+	@NotBlank
 	private String serverPassword;
 	
-	@JSONField(name="redis-bin-path")
+	@NotBlank
 	private String redisBinPath;
 	
-	@JSONField(name="redis-config-path")
+	@NotBlank
 	private String redisConfigPath;
-	
 	
 	public String getName() {
 		return name;

@@ -6,6 +6,8 @@ import Redis from '@/components/Redis'
 Vue.use(Router)
 
 export default new Router({
+  mode:'history',
+  base:'/tqmanager/',
   routes: [
     {
       path: '/',

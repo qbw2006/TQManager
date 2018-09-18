@@ -1,10 +1,10 @@
 package com.candy.service.patrol;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
@@ -16,11 +16,12 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
-import com.candy.config.redis.RedisConfig;
-import com.candy.config.redis.RedisConfigResolver;
-import com.candy.service.TQRedisClient;
+import com.candy.dao.IOperationDao;
+import com.candy.dao.RedisResult;
+import com.candy.dao.RedisServerEntity;
+import com.candy.dao.redis.TQRedisClient;
 import com.candy.utils.TqLog;
-import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import redis.clients.jedis.JedisPoolConfig;
@@ -28,24 +29,32 @@ import redis.clients.jedis.JedisPoolConfig;
 @Service
 public class RedisPatroller 
 {
-	
 	@Autowired
-	private StringRedisTemplate redisTemplate;
+	private IOperationDao rDao;
 	
-	@Autowired
-	private RedisConfigResolver rc;
+	private Map<String, TQRedisClient> connections = Maps.newConcurrentMap();
 	
-	private Map<String, TQRedisClient> connections = Maps.newHashMap();
-	
+	/**
+	 * 	连接需要事先创建，使用时效率就会很高。
+	 */
 	@PostConstruct
 	public void init()
 	{
-		for (RedisConfig rs : rc.getServerMap().values())
+		createClient();
+		TqLog.getDailyLog().info("RedisPatroller start [successfully]");
+	}
+	
+	private void createClient()
+	{
+		for (RedisServerEntity rs : rDao.findAllServer())
 		{
 			TQRedisClient tqRedis = null;
 			try
 			{
-				tqRedis = createTQRedisClient(rs);
+				if (isNew(rs.getId()))
+				{
+					tqRedis = createTQRedisClient(rs);
+				}
 			}
 			catch(Exception e)
 			{
@@ -53,18 +62,31 @@ public class RedisPatroller
 			}
 			connections.put(rs.getId(), tqRedis);
 		}
-		
-		TqLog.getDailyLog().info("RedisPatroller start [successfully]");
+		TqLog.getDailyLog().info("create client [successfully]");
+	}
+	
+	private boolean isNew(String id)
+	{
+		return (!connections.containsKey(id) || connections.get(id) == null);
+	}
+	
+	/**
+	 * 定期从数据库中取出所有redis服务器配置，针对新加的服务器，要创建其连接。
+	 */
+	@Scheduled(cron="${redis.schedule}") 
+	public void createRedisClient()
+	{
+		createClient();
 	}
 	
 	@Scheduled(cron="${redis.schedule}") 
 	public void patrol()
 	{
-		Map<String, RedisResult> result = checkRedis();
+		List<RedisResult> result = checkRedis();
 		
 		TqLog.getDailyLog().debug("check result = {}", JSON.toJSONString(result));
 		
-		result.forEach((k, v)->redisTemplate.opsForValue().set(k, JSON.toJSONString(v)));
+		result.forEach((v)->rDao.addResult(v));
 	}
 	
 	/**
@@ -73,7 +95,7 @@ public class RedisPatroller
 	 * @param rs
 	 * @return
 	 */
-	private TQRedisClient createTQRedisClient(RedisConfig rs)
+	private TQRedisClient createTQRedisClient(RedisServerEntity rs)
 	{
 		JedisConnectionFactory jcf = new JedisConnectionFactory();
 		jcf.setHostName(rs.getRedisHost());
@@ -97,21 +119,18 @@ public class RedisPatroller
 	}
 
 	
-	private Map<String, RedisResult> checkRedis()
+	private List<RedisResult> checkRedis()
 	{
-		Map<String, RedisResult> res = Maps.newHashMap();
+		List<RedisResult> res = Lists.newArrayList();
 		
 		for (Entry<String, TQRedisClient> en : connections.entrySet())
 		{
-			String id = en.getKey();
-			TQRedisClient  tqRedis = en.getValue();
+			RedisServerEntity rse = rDao.findServerById(en.getKey());
 			
-			RedisResult rr = new RedisResult();
+			TQRedisClient tqRedis = en.getValue();
+			
+			RedisResult rr = JSON.parseObject(JSON.toJSONString(rse), RedisResult.class);
 			//赋值
-			rr.setId(id);
-			rr.setName(rc.getServer(id).getName());
-			rr.setRedisHost(rc.getServer(id).getRedisHost());
-			rr.setRedisPort(rc.getServer(id).getRedisPort());
 			rr.setDate(new Date());
 			
 			try 
@@ -121,10 +140,10 @@ public class RedisPatroller
 				rr.setAlive(true);
 				
 			} catch (Exception e) {
-				TqLog.getErrorLog().warn("redis id = {} is disconnect.", id);
+				TqLog.getErrorLog().warn("redis id = {} is disconnect.", rse.getId());
 			}
 			
-			res.put(id, rr);
+			res.add(rr);
 		}
 		return res;
 	}

@@ -5,22 +5,38 @@
 	
 	group 'com.candy'
 	version '0.0.1'
-	sourceCompatibility = JavaVersion.VERSION_1_8
-	targetCompatibility = JavaVersion.VERSION_1_8
+	sourceCompatibility = 1.8
 	
 	
-	ext.slf4jVersion = "1.7.8"
+	//**************initial values***********
 
-
-	configurations {
-	   all*.exclude group: 'org.slf4j', module: 'slf4j-log4j12'
-	   all*.exclude group: 'org.mortbay.jetty', module: 'servlet-api-2.5'
+	ext.configDir = System.properties['configDir']
+	if (null == configDir || configDir == "") {
+		configDir = "debug"
 	}
+	println "Use " + configDir + " config..."
 
+	ext.groupId = System.properties["groupId"]
+	println "groupId=${groupId}"
+
+	ext.version1 = System.properties[configDir + ".VERSION"]
+	println "version=${version1}"
+	version = version1
+
+	import org.apache.tools.ant.filters.ReplaceTokens
+	
+	
+	//**************repositories***********
+
+	repositories {
+	   // mavenCentral()
+		maven { url "http://10.1.5.200:8081/nexus/content/groups/public/" }
+	//	maven { url "http://192.168.10.80:8081/nexus/content/repositories/snapshots/"}
+	}
 	
 	buildscript {
 		repositories {
-		//	maven { url "http://10.1.5.200:8081/nexus/content/groups/public/" }
+			maven { url "http://10.1.5.200:8081/nexus/content/groups/public/" }
 			jcenter()
 		}
 		dependencies {
@@ -28,9 +44,12 @@
 		}
 	}
 
-	repositories {
-		//mavenCentral()
-		maven { url "http://10.1.5.200:8081/nexus/content/groups/public/" }
+
+	//**************dependencies***********
+	
+	configurations {
+	   all*.exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+	   all*.exclude group: 'org.mortbay.jetty', module: 'servlet-api-2.5'
 	}
 
 	dependencies  {
@@ -45,17 +64,69 @@
 		compile group: 'commons-io', name: 'commons-io', version: '2.6'
 		compile group: 'com.jcraft', name: 'jsch', version: '0.1.54'
 	}
+	
+	//**************tasks***********
 
+	//将本工程的配置也拷贝配置到conf下
+	applicationDistribution.from("conf") {
+		into "conf"
+	}
+	//删除本地配置文件
+	task cleanConf(type: Delete) {
+	  delete "build/conf/"
+	}
+
+	//修改配置文件
+	task editConfig(type: Copy, dependsOn: cleanConf) {
+		from "../conf/"
+		into 'build/conf/'
+		filteringCharset = 'UTF-8'
+		 filter(ReplaceTokens, tokens: [
+					serviceName: project.name
+			])
+
+	}
+
+	//资源依赖配置文件
+	processResources.dependsOn(editConfig)
+	//eclipse依赖清除eclipse和配置文件
+	eclipseClasspath.dependsOn(cleanEclipse, editConfig)
+
+	//修改启动脚本，脚本中修改版本为运行版本
+	startScripts {
+		doLast {
+			delete windowsScript
+			unixScript.text = file("./tq-server.sh").getText().
+		replace("{main_class}", "${mainClassName}").
+				replace("{version}", "${version}").
+				replace("{jvm_run_args}", getJVMRunArgs("${systemName}", "${systemGroup}"))
+		}
+	}
+
+	//包名
+	archivesBaseName = "${project.name}"
+
+	def getJVMRunArgs(systemName,systemGroup){
+		def args = ""
+		if(systemName != null && systemName != ""){
+			args = args + " -Dsystem.name=" + systemName
+		}
+		if(systemGroup != null && systemGroup != ""){
+			args = args + " -Dgroup=" + systemGroup
+		}
+		println "jvmRunArgs="+args
+		return args
+	}
+
+	ext.systemGroup = ""
+	ext.systemName = "tq-server"
+	
     String[] dbpDefaultJvmArgs = ["-Dspring.config.location=file:conf/manage.properties"]
     List<String> projectJvmArgs = new ArrayList<String>();
     Collections.addAll(projectJvmArgs, dbpDefaultJvmArgs);
     applicationDefaultJvmArgs = projectJvmArgs
 
 	mainClassName = 'com.candy.TQManagerLauncher'
-
-	applicationDistribution.from('conf') {
-    	into "conf"
-	}
 
 
 

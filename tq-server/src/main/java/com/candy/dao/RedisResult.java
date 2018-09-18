@@ -1,20 +1,17 @@
-package com.candy.service.patrol;
+package com.candy.dao;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.assertj.core.util.Lists;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-public class RedisResult {
+public class RedisResult extends RedisServerEntity{
 
 	private String id;
-	private String name;
-	private String redisHost;
-	private int redisPort;
 	
 	@JSONField(name="isAlive")
 	private boolean isAlive = false;
@@ -28,26 +25,7 @@ public class RedisResult {
 		return id;
 	}
 	public void setId(String id) {
-		this.id = id;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getRedisHost() {
-		return redisHost;
-	}
-	public void setRedisHost(String redisHost) {
-		this.redisHost = redisHost;
-	}
-	public int getRedisPort() {
-		return redisPort;
-	}
-	public void setRedisPort(int redisPort) {
-		this.redisPort = redisPort;
+		this.id = super.getId();
 	}
 	public boolean isAlive() {
 		return isAlive;
@@ -64,7 +42,6 @@ public class RedisResult {
 		info.add(m);
 	}
 	
-	
 	public List<Map<Object, Object>> getInfo() {
 		return info;
 	}
@@ -76,11 +53,6 @@ public class RedisResult {
 	}
 	public void setDate(Date date) {
 		this.date = date;
-	}
-	@Override
-	public String toString() {
-		return "RedisResult [id=" + id + ", name=" + name + ", redisHost=" + redisHost + ", redisPort=" + redisPort
-				+ ", isAlive=" + isAlive + ", date=" + date + ", info=" + info + "]";
 	}
 	
 }

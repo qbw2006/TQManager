@@ -2,12 +2,35 @@
     <el-container>
       <el-aside width="400px"></el-aside>
       <el-main>
+           <el-button type="primary">添加服务器</el-button>
            <el-table
             :data="items"
             border
             stripe
             @row-dblclick="detailInfo"
-            style="width: 931px">
+            style="width: 1081px">
+            <el-table-column type="expand">
+              <template slot-scope="props">
+                <el-form label-position="left" inline class="demo-table-expand">
+                  <el-form-item label="服务器地址">
+                    <span>{{ props.row.name }}</span>
+                  </el-form-item>
+                  <el-form-item label="服务器用户名">
+                    <span>{{ props.row.shop }}</span>
+                  </el-form-item>
+                   <el-form-item label="服务器密码">
+                    <span>{{ props.row.shop }}</span>
+                  </el-form-item>                 
+                  <el-form-item label="redis程序地址">
+                    <span>{{ props.row.id }}</span>
+                  </el-form-item>
+                  <el-form-item label="redis配置地址">
+                    <span>{{ props.row.shopId }}</span>
+                  </el-form-item>
+                </el-form>
+              </template>
+            </el-table-column>    
+            
             <el-table-column
               prop="id"
               label="id"
@@ -18,7 +41,7 @@
               prop="name"
               label="名称"
               align="center"
-              width="120">
+              width="150">
             </el-table-column>
             <el-table-column
               prop="redisHost"
@@ -49,12 +72,21 @@
               width="180">
             </el-table-column>
             <el-table-column
-              label="操作"
+              label="服务器操作"
               align="center"              
               width="120">
               <template slot-scope="scope">
                 <el-button :disabled="scope.row.isAlive" @click="handleClick(scope.row)" type="text" size="small" >启动</el-button>
                 <el-button :disabled="!scope.row.isAlive" @click="handleClick(scope.row)" type="text" size="small">停止</el-button>
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="配置操作"
+              align="center"              
+              width="120">
+              <template slot-scope="scope">
+                <el-button  @click="handleConfig(scope.row)" type="text" size="small">修改</el-button>
+                <el-button  @click="handleCOnfig(scope.row)" type="text" size="small">删除</el-button>
               </template>
             </el-table-column>
           </el-table>    

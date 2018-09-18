@@ -1,4 +1,4 @@
-package com.candy.config.server;
+package com.candy.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

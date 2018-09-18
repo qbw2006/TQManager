@@ -13,6 +13,7 @@
 		{
 			"name":"windows",
 			"redis-host":"127.0.0.1",
+			"redis-port":63
 		},
 		{
 			"name":"centos7-1",

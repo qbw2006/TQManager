@@ -1,10 +1,16 @@
 package com.candy.service;
 
+import javax.validation.constraints.Max;
+
+import org.hibernate.validator.constraints.NotBlank;
+
 public class OperationTask {
 	
 	//0:stop 1:start
+	@Max(1)
 	private int opertion;
 	
+	@NotBlank
 	private String id;
 
 	public int getOpertion() {

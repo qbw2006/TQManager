@@ -1,4 +1,4 @@
-package com.candy.config.server;
+package com.candy.config;
 
 import java.util.concurrent.Executors;
 
