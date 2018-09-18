@@ -13,7 +13,6 @@ public class RedisServerEntity
 	
 	private int redisPort = 6379;
 	
-	@NotBlank
 	private String redisPassword;
 	
 	@NotBlank

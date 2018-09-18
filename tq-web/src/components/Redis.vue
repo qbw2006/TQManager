@@ -2,30 +2,27 @@
     <el-container>
       <el-aside width="400px"></el-aside>
       <el-main>
-           <el-button type="primary">添加服务器</el-button>
+           <el-button type="primary" @click="dialogFormVisible = true">添加服务器</el-button>
            <el-table
             :data="items"
-            border
             stripe
             @row-dblclick="detailInfo"
             style="width: 1081px">
             <el-table-column type="expand">
               <template slot-scope="props">
                 <el-form label-position="left" inline class="demo-table-expand">
-                  <el-form-item label="服务器地址">
-                    <span>{{ props.row.name }}</span>
-                  </el-form-item>
+
                   <el-form-item label="服务器用户名">
-                    <span>{{ props.row.shop }}</span>
+                    <span>{{ props.row.serverUsername }}</span>
                   </el-form-item>
                    <el-form-item label="服务器密码">
-                    <span>{{ props.row.shop }}</span>
+                    <span>{{ props.row.serverPassword }}</span>
                   </el-form-item>                 
-                  <el-form-item label="redis程序地址">
-                    <span>{{ props.row.id }}</span>
+                  <el-form-item label="redis程序目录">
+                    <span>{{ props.row.redisBinPath }}</span>
                   </el-form-item>
-                  <el-form-item label="redis配置地址">
-                    <span>{{ props.row.shopId }}</span>
+                  <el-form-item label="redis配置目录">
+                    <span>{{ props.row.redisConfigPath }}</span>
                   </el-form-item>
                 </el-form>
               </template>
@@ -98,9 +95,37 @@
           </el-table>
         </el-dialog>
       
-    </el-container>
-    
 
+        <el-dialog title="Redis服务器配置"  :visible.sync="dialogFormVisible">
+          <el-form :model="form">
+            <el-form-item label="Redis名称" :label-width="formLabelWidth">
+              <el-input v-model="form.name" width="150" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="RedisIP"  :label-width="formLabelWidth">
+              <el-input v-model="form.name" width="150" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="Redis端口"  :label-width="formLabelWidth">
+              <el-input v-model="form.name" width="50" autocomplete="off"></el-input>
+            </el-form-item>      
+            <el-form-item label="服务器用户名" :label-width="formLabelWidth">
+              <el-input v-model="form.name" width="150" autocomplete="off"></el-input>
+            </el-form-item>   
+             <el-form-item label="服务器密码" :label-width="formLabelWidth">
+              <el-input v-model="form.name" width="200"  autocomplete="off"></el-input>
+            </el-form-item>  
+            <el-form-item label="Redis程序路径" :label-width="formLabelWidth">
+              <el-input v-model="form.name" width="200"  autocomplete="off"></el-input>
+            </el-form-item>  
+            <el-form-item label="Redis配置路径" :label-width="formLabelWidth">
+              <el-input v-model="form.name" width="200" autocomplete="off"></el-input>
+            </el-form-item>  
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+          </div>
+        </el-dialog>
+    </el-container>
     
 </template>
 
@@ -115,7 +140,19 @@ export default {
         return {
           items:[],
           dialogTableVisible: false,
-          detail:[]
+          dialogFormVisible: false,
+          detail:[],
+          form: {
+          name: '',
+          region: '',
+          date1: '',
+          date2: '',
+          delivery: false,
+          type: [],
+          resource: '',
+          desc: ''
+        },
+        formLabelWidth: '120px'
         }
     },
     
