@@ -7,7 +7,7 @@
             :data="items"
             stripe
             @row-dblclick="detailInfo"
-            style="width: 1251px">
+            style="width: 1351px">
             <el-table-column type="expand">
               <template slot-scope="props">
                 <el-form label-position="left" inline class="demo-table-expand">
@@ -37,7 +37,8 @@
               prop="name"
               label="名称"
               align="center"
-              width="150">
+              sortable
+              width="250">
             </el-table-column>
             <el-table-column
               prop="redisHost"
@@ -53,7 +54,8 @@
             </el-table-column>
             <el-table-column
               prop="redisMode"
-              label="模式"
+              label="部署模式"
+              sortable
               align="center"              
               width="120">
             </el-table-column>
@@ -166,7 +168,7 @@ export default {
         rules: {
           name: [
             { required: true, message: '请输入redis名称', trigger: 'blur' },
-            { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
+            { min: 3, max: 50, message: '长度在 3 到 50 个字符', trigger: 'blur' }
           ],
           redisHost: [
            { required: true, message: '请输入redis地址', trigger: 'blur' }

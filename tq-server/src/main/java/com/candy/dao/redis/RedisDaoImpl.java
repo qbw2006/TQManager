@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import com.candy.service.OperationTask;
 import com.candy.utils.TqLog;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
@@ -131,7 +133,8 @@ public class RedisDaoImpl implements IOperationDao, IOperationTask{
 	public List<RedisResult> findAllResult() {
 		List<RedisResult> res = Lists.newArrayList();
 		
-		Map<Object, Object> resFromDb = redisClient.entries(RESULT_KEY);
+		//为了让结果有序
+		Map<Object, Object> resFromDb = new TreeMap<>(redisClient.entries(RESULT_KEY));
 		
 		resFromDb.forEach((k, v)->{res.add(JSON.parseObject((String)v, RedisResult.class));});
 		return res;

@@ -16,7 +16,7 @@
     </encoder>
   </appender>
   
-  <appender name="consoleFileLog"
+  <appender name="file"
 		class="ch.qos.logback.core.rolling.RollingFileAppender" >
 		<File>${LOG_HOME}/console.log</File>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">

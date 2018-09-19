@@ -9,7 +9,12 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
 
-Vue.prototype.$http=axios;  
+const host = process.env.NODE_ENV === "development" ? "" : "http://10.1.6.37:8088";
+const instance = axios.create({
+    baseURL: host
+})
+
+Vue.prototype.$http=instance;  
 Vue.config.productionTip = false
 
 // 配置axios发送请求时携带cookie
