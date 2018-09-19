@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.TreeMap;
 
 import javax.annotation.PostConstruct;
 
@@ -137,7 +138,7 @@ public class RedisPatroller
 			
 			try 
 			{
-				Properties p = tqRedis.info();
+				Map<Object, Object> p = new TreeMap<>(tqRedis.info());
 				p.forEach((k, v)->rr.addAttr(k, v));
 				rr.setAlive(true);
 				
