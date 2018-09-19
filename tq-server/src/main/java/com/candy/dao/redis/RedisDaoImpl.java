@@ -137,4 +137,10 @@ public class RedisDaoImpl implements IOperationDao, IOperationTask{
 		return res;
 	}
 
+	@Override
+	public void deleteResult(String id) {
+		redisClient.delete(RESULT_KEY, id);
+		
+	}
+
 }

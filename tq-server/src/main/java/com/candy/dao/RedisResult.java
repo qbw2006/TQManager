@@ -25,7 +25,7 @@ public class RedisResult extends RedisServerEntity{
 		return id;
 	}
 	public void setId(String id) {
-		this.id = super.getId();
+		this.id = id;
 	}
 	public boolean isAlive() {
 		return isAlive;
@@ -54,5 +54,6 @@ public class RedisResult extends RedisServerEntity{
 	public void setDate(Date date) {
 		this.date = date;
 	}
+	
 	
 }

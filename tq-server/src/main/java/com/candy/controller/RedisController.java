@@ -46,7 +46,7 @@ public class RedisController {
 		
 	}
 	
-	@RequestMapping(value= "/", method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.POST)
 	public String addServer(@Validated RedisServerEntity rse)
 	{
 		TqLog.getDailyLog().info("add server, server = {}", rse);
@@ -67,13 +67,19 @@ public class RedisController {
 		return JSONMessage.createSuccess().toString();
 	}
 	
-	@RequestMapping(value= "/{id}", method = RequestMethod.POST)
-	public String deleteServer(@PathVariable String id)
+	@RequestMapping(value= "/{id:.+}", method = RequestMethod.DELETE)
+	public String deleteServer(@PathVariable("id") String id)
 	{
 		TqLog.getDailyLog().info("delete server, id = {}", id);
+		//1.删除配置数据
 		rService.deleteServer(id);
+		//2.删除结果数据
+		rService.deleteResult(id);
 		
-		return JSONMessage.createSuccess().toString();
+		JSONObject res = new JSONObject();
+		res.put("id", id);
+		
+		return JSONMessage.createSuccess().addData(res).toString();
 	}
 	
 }

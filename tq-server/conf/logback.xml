@@ -8,13 +8,11 @@
 <!--    http://www.qos.ch/shop/products/professionalSupport         -->
 <!--                                                                -->
 <configuration scan="true" scanPeriod="30 seconds" debug="false">
-	<property name="sName" value="${system.name}" />
-    <contextName>${system.name}</contextName>
 	<property name="LOG_HOME" value="${user.dir}/log" />
 
   <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
-    	<pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSS} ${sName} %file:%line %thread C %level b:%X{bid:-Null} : %m%n</pattern>
+    	<pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSS} %file:%line %thread C %level b:%X{bid:-Null} : %m%n</pattern>
     </encoder>
   </appender>
   
@@ -32,7 +30,7 @@
 			</timeBasedFileNamingAndTriggeringPolicy>
 		</rollingPolicy>
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSS} ${sName} %file:%line %thread C %level b:%X{bid:-Null} : %m%n</pattern>
+			<pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSS} %file:%line %thread C %level b:%X{bid:-Null} : %m%n</pattern>
 		</encoder>
 	</appender>
   

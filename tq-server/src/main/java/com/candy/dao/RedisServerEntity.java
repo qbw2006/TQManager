@@ -1,6 +1,7 @@
 package com.candy.dao;
 
-import org.apache.commons.lang3.StringUtils;
+import java.beans.Transient;
+
 import org.hibernate.validator.constraints.NotBlank;
 
 public class RedisServerEntity 
@@ -14,6 +15,9 @@ public class RedisServerEntity
 	private int redisPort = 6379;
 	
 	private String redisPassword;
+	
+	@NotBlank
+	private String redisMode;
 	
 	@NotBlank
 	private String serverUsername;
@@ -37,6 +41,12 @@ public class RedisServerEntity
 		return redisHost;
 	}
 	
+	public String getRedisMode() {
+		return redisMode;
+	}
+	public void setRedisMode(String redisMode) {
+		this.redisMode = redisMode;
+	}
 	public void setRedisHost(String redisHost) {
 		this.redisHost = redisHost;
 	}
@@ -87,36 +97,28 @@ public class RedisServerEntity
 				+ ", redisPassword=" + redisPassword + ", serverUsername=" + serverUsername + ", serverPassword="
 				+ serverPassword + ", redisBinPath=" + redisBinPath + ", redisConfigPath=" + redisConfigPath + "]";
 	}
+	@Transient
 	public String getStartCommand()
 	{
 		return redisBinPath + " " + redisConfigPath;
 	}
 	
+	@Transient
 	public String getStopCommand()
 	{
 		return "pkill -f " + getId();
 	}
 	
-
+	@Transient
 	public String getId()
 	{
 		return redisHost + ":" + redisPort;
 	}
 
+	@Transient
 	public String getServerInfo()
 	{
 		return "ServerInfo [serverHost=" + redisHost
 				+ ", serverUsername=" + serverUsername + ", serverPassword=" + serverPassword + "]";
-	}
-
-	public boolean isCorrect()
-	{
-		if (StringUtils.isEmpty(name) || StringUtils.isEmpty(redisHost) ||
-				redisPort < 0
-				|| StringUtils.isEmpty(serverUsername) || StringUtils.isEmpty(serverPassword))
-		{
-			return false;
-		}
-		return true;
 	}
 }

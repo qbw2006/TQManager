@@ -51,6 +51,11 @@ public interface IOperationDao {
 	List<RedisResult> findAllResult();
 	
 	/**
+	 * 删除检查结果
+	 */
+	void deleteResult(String id);
+	
+	/**
 	 * 添加启动或者停止任务
 	 * @param ot
 	 */

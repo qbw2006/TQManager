@@ -54,15 +54,16 @@ public class RedisPatroller
 				if (isNew(rs.getId()))
 				{
 					tqRedis = createTQRedisClient(rs);
+					TqLog.getDailyLog().info("create client, info = {}", rs.getId());
+					connections.put(rs.getId(), tqRedis);
 				}
 			}
 			catch(Exception e)
 			{
 				TqLog.getErrorLog().warn("create tqredis client. info = {}", rs);
 			}
-			connections.put(rs.getId(), tqRedis);
 		}
-		TqLog.getDailyLog().info("create client [successfully]");
+		
 	}
 	
 	private boolean isNew(String id)
@@ -131,6 +132,7 @@ public class RedisPatroller
 			
 			RedisResult rr = JSON.parseObject(JSON.toJSONString(rse), RedisResult.class);
 			//赋值
+			rr.setId(rse.getId());
 			rr.setDate(new Date());
 			
 			try 
@@ -148,4 +150,8 @@ public class RedisPatroller
 		return res;
 	}
 	
+	public void deleteClient(String id)
+	{
+		connections.remove(id);
+	}
 }
