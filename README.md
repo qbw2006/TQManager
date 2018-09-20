@@ -1,5 +1,5 @@
 # TQManager:基于Web的Redis管理工具
-### 主要功能
+## 主要功能
 1. 监控redis-server是否在线
 2. 启动redis-server
 3. 关闭redis-server
@@ -9,26 +9,26 @@
 主界面如下：
 ![image](https://github.com/qbw2006/Resources/blob/master/TQManager/web-ui.png)
 
-### 使用技术
-#### 前端
+## 使用技术
+### 前端
   vue-cli </br>
   webpack </br>
   element-ui </br>
   axios </br>
   tomcat
 
-#### 后端
+### 后端
   springboot </br>
   redis </br>
-  logback 
+  logback </br>
   gradle
 
-### 部署
+## 部署
 **要求** </br>
   JDK 1.8+ </br>
   tomcat 8.0 +
 
-#### 前端
+### 前端
 1. 下载tq-web代码后，修改main.js
 ```
 const host = process.env.NODE_ENV === "development" ? "" : "后端服务器部署的地址，例如：http://10.1.6.37:8088";
@@ -38,7 +38,7 @@ const host = process.env.NODE_ENV === "development" ? "" : "后端服务器部�
 
 3. 将dist目录拷贝到tomcat下(假设已经成功地部署了tomcat)
 
-#### 后端
+### 后端
 1. 下载tq-server代码，在tq-server目录下运行gradle distTar
 
 2. 复制打好的tar包到服务器
@@ -49,9 +49,9 @@ tq-server使用redis保存数据，所以需要在manage.properties配置redis�
 4. 运行./bin/tq-server start
 
 
-### 功能简介
+## 功能简介
 
-#### 添加服务器
+### 添加Redis
 ![image](https://github.com/qbw2006/Resources/blob/master/TQManager/add-server.png)
 
 **Redis配置**：包括redis相关信息。
@@ -71,3 +71,22 @@ tq-server使用redis保存数据，所以需要在manage.properties配置redis�
 完成配置后，点击**创建**按钮。
 
 **注意：刚创建的配置信息不会立即显示，需要等待10秒钟**
+
+### 查看info命令返回的信息
+
+![image](https://github.com/qbw2006/Resources/blob/master/TQManager/dbl-click.png)
+
+![image](https://github.com/qbw2006/Resources/blob/master/TQManager/redis-info.png)
+**注意：详细信息按字母顺序排列**
+
+### 启动Redis
+
+![image](https://github.com/qbw2006/Resources/blob/master/TQManager/start-server.png)
+**注意：不能启动运行状态的机器，不能关闭宕机状态的机器**
+
+### 关闭Redis
+![image](https://github.com/qbw2006/Resources/blob/master/TQManager/stop-server.png)
+
+### 删除Redis
+![image](https://github.com/qbw2006/Resources/blob/master/TQManager/stop-server.png)
+**注意：刚删除的配置信息不会立即删除，需要等待10秒钟**
