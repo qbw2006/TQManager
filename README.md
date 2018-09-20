@@ -9,6 +9,45 @@
 主界面如下：
 ![image](https://github.com/qbw2006/Resources/blob/master/TQManager/web-ui.png)
 
+### 使用技术
+**前端**
+vue-cli
+webpack
+element-ui
+axios
+
+**后端**
+springboot
+redis
+logback
+
+### 部署
+**要求**
+JDK 1.8+
+tomcat 8.0 +
+
+**前端**
+1. 下载代码tq-web后，修改main.js文件中的地址
+```
+const host = process.env.NODE_ENV === "development" ? "" : "后端服务器部署的地址，例如：http://10.1.6.37:8088";
+
+```
+2. 在tq-web目录下运行npm run build或者cnpm run build打包，打包后生成dist目录
+
+3. 将dist目录下的所有文件拷贝到tomcat下。(假设你已经成功地部署了tomcat)
+
+**后端**
+1. 下载代码tq-server后，运行gradle distTar
+
+2. 复制打好的tar包到服务器
+
+3. 修改conf目录下的配置文件
+tq-server使用redis保存数据，所以需要在manage.properties配置redis信息，配置参考spring-boot中redis配置方法。
+
+4. 运行./bin/tq-server start
+
+
+### 功能简介
 
 #### 添加服务器
 ![image](https://github.com/qbw2006/Resources/blob/master/TQManager/add-server.png)
