@@ -88,5 +88,5 @@ tq-server使用redis保存数据，所以需要在manage.properties配置redis�
 ![image](https://github.com/qbw2006/Resources/blob/master/TQManager/stop-server.png)
 
 ### 删除Redis
-![image](https://github.com/qbw2006/Resources/blob/master/TQManager/stop-server.png)
+![image](https://github.com/qbw2006/Resources/blob/master/TQManager/delete-server.png)
 **注意：刚删除的配置信息不会立即删除，需要等待10秒钟**
