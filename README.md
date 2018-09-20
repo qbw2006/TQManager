@@ -1,4 +1,4 @@
-# tqManager:基于Web的Redis管理工具
+# TQManager:基于Web的Redis管理工具
 ### 主要功能
 1. 监控redis-server是否在线
 2. 启动redis-server
@@ -10,34 +10,36 @@
 ![image](https://github.com/qbw2006/Resources/blob/master/TQManager/web-ui.png)
 
 ### 使用技术
-**前端**
-vue-cli
-webpack
-element-ui
-axios
+#### 前端
+  vue-cli </br>
+  webpack </br>
+  element-ui </br>
+  axios </br>
+  tomcat
 
-**后端**
-springboot
-redis
-logback
+#### 后端
+  springboot </br>
+  redis </br>
+  logback 
+  gradle
 
 ### 部署
-**要求**
-JDK 1.8+
-tomcat 8.0 +
+**要求** </br>
+  JDK 1.8+ </br>
+  tomcat 8.0 +
 
-**前端**
-1. 下载代码tq-web后，修改main.js文件中的地址
+#### 前端
+1. 下载tq-web代码后，修改main.js
 ```
 const host = process.env.NODE_ENV === "development" ? "" : "后端服务器部署的地址，例如：http://10.1.6.37:8088";
-
 ```
-2. 在tq-web目录下运行npm run build或者cnpm run build打包，打包后生成dist目录
 
-3. 将dist目录下的所有文件拷贝到tomcat下。(假设你已经成功地部署了tomcat)
+2. 在tq-web目录下运行npm run build或者cnpm run build打包，生成dist目录
 
-**后端**
-1. 下载代码tq-server后，运行gradle distTar
+3. 将dist目录拷贝到tomcat下(假设已经成功地部署了tomcat)
+
+#### 后端
+1. 下载tq-server代码，在tq-server目录下运行gradle distTar
 
 2. 复制打好的tar包到服务器
 
