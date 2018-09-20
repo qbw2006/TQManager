@@ -77,11 +77,12 @@ tq-server使用redis保存数据，所以需要在manage.properties配置redis�
 ![image](https://github.com/qbw2006/Resources/blob/master/TQManager/dbl-click.png)
 
 ![image](https://github.com/qbw2006/Resources/blob/master/TQManager/redis-info.png)
-**注意：详细信息按字母顺序排列**
+
+</br>**注意：详细信息按字母顺序排列**
 
 ### 启动Redis
 
-![image](https://github.com/qbw2006/Resources/blob/master/TQManager/start-server.png)
+![image](https://github.com/qbw2006/Resources/blob/master/TQManager/start-server.png)  
 **注意：不能启动运行状态的机器，不能关闭宕机状态的机器**
 
 ### 关闭Redis
