@@ -24,9 +24,9 @@
 **服务器配置**：包括部署redis主机的信息，这部分信息主要用来实现 *启动*和*停止*功能。
 1. 服务器用户名：部署redis主机的登录用户名，例如root。
 2. 服务器密码：服务器用户名对应的密码。
-3. Redis程序路径：redis-server在此服务器的绝对路径，例如/usr/local/bin/redis/bin/redis-server，一定要是redis-server的**绝对路径*。
-4. Redis配置路径：redis配置文件在此服务器的绝对路径，例如/usr/local/bin/redis/bin/redis.conf，一定要是配置文件的**绝对路径*。
+3. Redis程序路径：redis-server在此服务器的绝对路径，例如/usr/local/bin/redis/bin/redis-server，一定要是redis-server的**绝对路径**。
+4. Redis配置路径：redis配置文件在此服务器的绝对路径，例如/usr/local/bin/redis/bin/redis.conf，一定要是配置文件的**绝对路径**。
 
 完成配置后，点击**创建**按钮。
 
-**注意：刚创建的配置信息不会立即显示，需要等待10秒钟*
+**注意：刚创建的配置信息不会立即显示，需要等待10秒钟**
