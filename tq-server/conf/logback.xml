@@ -41,7 +41,7 @@
 	 
 	<logger name="org.apache.commons.beanutils" level="ERROR" />
 	<logger name="org.dna.moquette.messaging.subscriptions" level="ERROR" />
-	<logger name="org.apache.zookeeper" level="ERROR" />
+	<logger name="org.apache.zookeeper" level="ERROR" /> 
 
 
 	<logger name="SystemLog" level="debug" additivity="false">

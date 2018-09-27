@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.candy.dao.IOperationDao;
+import com.candy.dao.IRedisDao;
 import com.candy.dao.RedisResult;
 import com.candy.dao.RedisServerEntity;
 import com.candy.service.patrol.RedisPatroller;
@@ -17,7 +17,7 @@ public class RedisService {
 	private RedisPatroller rp;
 	
 	@Autowired
-	private IOperationDao rDao; 
+	private IRedisDao rDao; 
 	
 	public List<RedisResult> healthInfo()
 	{

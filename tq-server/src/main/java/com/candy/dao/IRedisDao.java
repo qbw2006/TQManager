@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.candy.service.OperationTask;
 
-public interface IOperationDao {
+public interface IRedisDao {
 	
 	/**
 	 * 查询所有redis服务器

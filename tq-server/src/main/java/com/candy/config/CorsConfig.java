@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 /**
  * 设置允许跨域
@@ -31,4 +32,9 @@ public class CorsConfig {
        source.registerCorsConfiguration("/**", buildConfig()); 
        return new CorsFilter(source);
    }
+   
+   @Bean
+   public ServerEndpointExporter serverEndpointExporter() {
+       return new ServerEndpointExporter();
+   }   
 }

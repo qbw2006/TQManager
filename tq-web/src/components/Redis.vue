@@ -7,7 +7,7 @@
             :data="items"
             stripe
             @row-dblclick="detailInfo"
-            style="width: 1351px">
+            style="width: 1381px">
             <el-table-column type="expand">
               <template slot-scope="props">
                 <el-form label-position="left" inline class="demo-table-expand">
@@ -78,8 +78,9 @@
             <el-table-column
               label="服务器操作"
               align="center"              
-              width="120">
+              width="150">
               <template slot-scope="scope">
+                <el-button @click="openShell(scope.row)" type="text" size="small">连接</el-button>
                 <el-button :disabled="scope.row.isAlive" @click="handleTask(scope.row)" type="text" size="small" >启动</el-button>
                 <el-button :disabled="!scope.row.isAlive" @click="handleTask(scope.row)" type="text" size="small">停止</el-button>
               </template>
@@ -137,14 +138,23 @@
             </el-form-item>            
           </el-form>
         </el-dialog>
+        
+        <el-dialog  width="50%" :visible.sync="shellVisible" @close="closeShell()">
+            <div id ="xterm-container"></div>
+        </el-dialog>
     </el-container>
-    
 </template>
 
 <script>
     
 import qs from 'qs'
 import $ from 'jquery'
+import xm from 'xterm'
+
+import { Terminal } from 'xterm';
+import * as fit from 'xterm/lib/addons/fit/fit';
+import * as attach from 'xterm/lib/addons/attach/attach';
+
 
 export default {
     data(){
@@ -152,7 +162,10 @@ export default {
           items:[],
           dialogTableVisible: false,
           dialogFormVisible: false,
+          shellVisible:false,
+          webSocket:null,
           detail:[],
+          
           
           form: {
           name: '',
@@ -230,6 +243,26 @@ export default {
             $(parent).attr("disabled", "disabled");
         },
         
+        closeShell(){
+            this.term.dispose();
+            this.webSocket.close();
+        },
+        openShell(redis) {
+            var self = this;
+            self.shellVisible = true;
+            this.$nextTick(function (){
+                self.webSocket =  new WebSocket("ws://localhost:8088/websocket/" + redis.id); 
+                self.term = new Terminal({ cursorBlink: true });
+                self.shellId = redis.id;
+                Terminal.applyAddon(fit);
+                Terminal.applyAddon(attach);
+                self.term.open(document.getElementById("xterm-container"));
+                self.term.attach(self.webSocket);
+                self.term.fit();     // This method is now available for usage                   
+            })
+       
+        },
+        
         detailInfo(row, event) {
             this.dialogTableVisible = true;
             this.detail = row.info;
@@ -290,6 +323,10 @@ export default {
     /*重要!否则表格不能正常显示*/
     td {
         background-clip: padding-box;
+    }
+    #xterm-container
+    {
+        position: relative !important;
     }
     /*@import url("../css/base.css");*/
     /*@import url("../css/redis.css");*/

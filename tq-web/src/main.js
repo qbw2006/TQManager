@@ -7,7 +7,8 @@ import router from './router'
 import axios from 'axios'  
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-
+import 'font-awesome/css/font-awesome.min.css'
+import 'xterm/dist/xterm.css'
 
 const host = process.env.NODE_ENV === "development" ? "" : "http://10.1.6.37:8088";
 const instance = axios.create({

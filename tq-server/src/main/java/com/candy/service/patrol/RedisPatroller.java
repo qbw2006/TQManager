@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Properties;
 import java.util.TreeMap;
 
 import javax.annotation.PostConstruct;
@@ -17,7 +16,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
-import com.candy.dao.IOperationDao;
+import com.candy.dao.IRedisDao;
 import com.candy.dao.RedisResult;
 import com.candy.dao.RedisServerEntity;
 import com.candy.dao.redis.TQRedisClient;
@@ -31,7 +30,7 @@ import redis.clients.jedis.JedisPoolConfig;
 public class RedisPatroller 
 {
 	@Autowired
-	private IOperationDao rDao;
+	private IRedisDao rDao;
 	
 	private Map<String, TQRedisClient> connections = Maps.newConcurrentMap();
 	

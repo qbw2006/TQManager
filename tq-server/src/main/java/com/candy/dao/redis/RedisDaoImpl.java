@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.alibaba.fastjson.JSON;
-import com.candy.dao.IOperationDao;
+import com.candy.dao.IRedisDao;
 import com.candy.dao.IOperationTask;
 import com.candy.dao.RedisResult;
 import com.candy.dao.RedisServerEntity;
@@ -20,14 +20,13 @@ import com.candy.service.OperationTask;
 import com.candy.utils.TqLog;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
 @Repository
-public class RedisDaoImpl implements IOperationDao, IOperationTask{
+public class RedisDaoImpl implements IRedisDao, IOperationTask{
 	
 	private static final String SERVER_KEY = "redis-entity";
 	private static final String RESULT_KEY = "redis-result";
