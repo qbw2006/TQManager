@@ -7,7 +7,7 @@
             :data="items"
             stripe
             @row-dblclick="detailInfo"
-            style="width: 1381px">
+            style="width: 1351px">
             <el-table-column type="expand">
               <template slot-scope="props">
                 <el-form label-position="left" inline class="demo-table-expand">
@@ -78,9 +78,8 @@
             <el-table-column
               label="服务器操作"
               align="center"              
-              width="150">
+              width="120">
               <template slot-scope="scope">
-                <el-button @click="openShell(scope.row)" type="text" size="small">连接</el-button>
                 <el-button :disabled="scope.row.isAlive" @click="handleTask(scope.row)" type="text" size="small" >启动</el-button>
                 <el-button :disabled="!scope.row.isAlive" @click="handleTask(scope.row)" type="text" size="small">停止</el-button>
               </template>
@@ -91,6 +90,7 @@
               width="120">
               <template slot-scope="scope">
                 <el-button @click="delConfig(scope.row)" type="danger" icon="el-icon-delete" size="mini" circle></el-button>
+                <el-button @click="openShell(scope.row)" type="primary" icon="el-icon-view" size="mini" circle></el-button>
               </template>
             </el-table-column>
           </el-table>    
@@ -251,7 +251,10 @@ export default {
             var self = this;
             self.shellVisible = true;
             this.$nextTick(function (){
-                self.webSocket =  new WebSocket("ws://localhost:8088/websocket/" + redis.id); 
+                
+                let host = process.env.NODE_ENV === "development" ? "ws://localhost:8088" : "ws://10.1.6.37:8088";
+                
+                self.webSocket =  new WebSocket(host +"/websocket/" + redis.id); 
                 self.term = new Terminal({ cursorBlink: true });
                 self.shellId = redis.id;
                 Terminal.applyAddon(fit);

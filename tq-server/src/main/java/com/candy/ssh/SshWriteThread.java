@@ -5,9 +5,6 @@ import java.io.InputStream;
 
 import javax.websocket.Session;
 
-import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketSession;
-
 /**
  * 创建日期:2018年1月11日<br/>
  * 创建时间:下午10:15:48<br/>
@@ -24,8 +21,6 @@ public class SshWriteThread implements Runnable{
 
     //用于输出数据
     private Session session;
-
-    private static final String ENCODING = "UTF-8";
 
     //停止线程
     public void stopThread() {
