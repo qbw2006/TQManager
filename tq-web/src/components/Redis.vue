@@ -89,8 +89,8 @@
               align="center"              
               width="120">
               <template slot-scope="scope">
+                <el-button @click="openShell(scope.row)" type="primary" icon="el-icon-view" size="mini" circle></el-button> 
                 <el-button @click="delConfig(scope.row)" type="danger" icon="el-icon-delete" size="mini" circle></el-button>
-                <el-button @click="openShell(scope.row)" type="primary" icon="el-icon-view" size="mini" circle></el-button>
               </template>
             </el-table-column>
           </el-table>    
