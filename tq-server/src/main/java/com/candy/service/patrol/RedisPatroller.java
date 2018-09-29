@@ -19,7 +19,7 @@ import com.alibaba.fastjson.JSON;
 import com.candy.dao.IRedisDao;
 import com.candy.dao.RedisResult;
 import com.candy.dao.RedisServerEntity;
-import com.candy.dao.redis.TQRedisClient;
+import com.candy.dao.redis.TqRedisClient;
 import com.candy.utils.TqLog;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -32,7 +32,7 @@ public class RedisPatroller
 	@Autowired
 	private IRedisDao rDao;
 	
-	private Map<String, TQRedisClient> connections = Maps.newConcurrentMap();
+	private Map<String, TqRedisClient> connections = Maps.newConcurrentMap();
 	
 	/**
 	 * 	连接需要事先创建，使用时效率就会很高。
@@ -46,21 +46,21 @@ public class RedisPatroller
 	
 	private void createClient()
 	{
-		for (RedisServerEntity rs : rDao.findAllServer())
+		for (RedisServerEntity rs : rDao.listAllServer())
 		{
-			TQRedisClient tqRedis = null;
+			TqRedisClient tqRedis = null;
 			try
 			{
 				if (isNew(rs.getId()))
 				{
 					tqRedis = createTQRedisClient(rs);
-					TqLog.getDailyLog().info("create client, info = {}", rs.getId());
+					TqLog.getDailyLog().info("create redis client, info = {}", rs.getId());
 					connections.put(rs.getId(), tqRedis);
 				}
 			}
 			catch(Exception e)
 			{
-				TqLog.getErrorLog().warn("create tqredis client. info = {}", rs);
+				TqLog.getErrorLog().warn("create redis client. info = {}", rs);
 			}
 		}
 		
@@ -96,7 +96,7 @@ public class RedisPatroller
 	 * @param rs
 	 * @return
 	 */
-	private TQRedisClient createTQRedisClient(RedisServerEntity rs)
+	private TqRedisClient createTQRedisClient(RedisServerEntity rs)
 	{
 		JedisConnectionFactory jcf = new JedisConnectionFactory();
 		jcf.setHostName(rs.getRedisHost());
@@ -116,7 +116,7 @@ public class RedisPatroller
 		jcf.setPoolConfig(jpc);
 		jcf.afterPropertiesSet();
 		
-		return new TQRedisClient(new StringRedisTemplate(jcf));
+		return new TqRedisClient(new StringRedisTemplate(jcf));
 	}
 
 	
@@ -124,11 +124,11 @@ public class RedisPatroller
 	{
 		List<RedisResult> res = Lists.newArrayList();
 		
-		for (Entry<String, TQRedisClient> en : connections.entrySet())
+		for (Entry<String, TqRedisClient> en : connections.entrySet())
 		{
 			RedisServerEntity rse = rDao.findServerById(en.getKey());
 			
-			TQRedisClient tqRedis = en.getValue();
+			TqRedisClient tqRedis = en.getValue();
 			
 			RedisResult rr = JSON.parseObject(JSON.toJSONString(rse), RedisResult.class);
 			//赋值
@@ -142,7 +142,7 @@ public class RedisPatroller
 				rr.setAlive(true);
 				
 			} catch (Exception e) {
-				TqLog.getErrorLog().warn("redis id = {} is disconnect.", rse.getId());
+				TqLog.getErrorLog().warn("redis client is disconnect.  id = {} ", rse.getId());
 			}
 			
 			res.add(rr);

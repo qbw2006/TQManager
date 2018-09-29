@@ -30,7 +30,7 @@ public class RedisService {
 	}
 	public void modifyServer(RedisServerEntity rse)
 	{
-		 rDao.modifyServer(rse);
+		 rDao.updateServer(rse);
 	}
 	
 	public void deleteServer(String id)

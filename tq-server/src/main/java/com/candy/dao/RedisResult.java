@@ -21,9 +21,11 @@ public class RedisResult extends RedisServerEntity{
 	
 	private List<Map<Object, Object>> info = Lists.newArrayList();
 	
+	@Override
 	public String getId() {
 		return id;
 	}
+	
 	public void setId(String id) {
 		this.id = id;
 	}

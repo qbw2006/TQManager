@@ -5,6 +5,8 @@ import java.io.InputStream;
 
 import javax.websocket.Session;
 
+import com.candy.utils.TqLog;
+
 /**
  * 创建日期:2018年1月11日<br/>
  * 创建时间:下午10:15:48<br/>
@@ -32,23 +34,18 @@ public class SshWriteThread implements Runnable{
         this.session = session;
     }
 
+    @Override
     public void run() {
         try {
             //读取数据
-            while (!isStop  &&                       //线程是否停止
-                    session != null &&                //session 不是空的
-                    session.isOpen()) {               //session是打开的状态
-                //获取到我们的session
-//              session.sendMessage(new TextMessage(new String(result.toString().getBytes("ISO-8859-1"),"UTF-8")));
-                //写数据到服务器端
-//              session.sendMessage(new TextMessage(result));
-
+            while (!isStop  && 
+                    session != null &&
+                    session.isOpen()) {
                 //写数据到客户端
                 writeToWeb(in);
             }
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        	TqLog.getErrorLog().error("", e);
         }
 
     }
@@ -80,8 +77,7 @@ public class SshWriteThread implements Runnable{
                 session.getBasicRemote().sendText(new String(sb.toString().getBytes("ISO-8859-1"),"UTF-8"));
             }
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        	TqLog.getErrorLog().error("", e);
         }
     }
 }

@@ -22,7 +22,7 @@ import com.candy.dao.IOperationTask;
  *
  */
 @Component
-public class TQRedisClient {
+public class TqRedisClient {
 
 	private static final String CHANLE_KEY = "redis-task";
 	
@@ -31,11 +31,11 @@ public class TQRedisClient {
 	@Autowired
 	private StringRedisTemplate redisTemplate;
 	
-	public TQRedisClient() {
+	public TqRedisClient() {
 		
 	}
 	
-	public TQRedisClient(StringRedisTemplate redisTemplate) {
+	public TqRedisClient(StringRedisTemplate redisTemplate) {
 		this.redisTemplate = redisTemplate;
 	}
 	
@@ -43,6 +43,7 @@ public class TQRedisClient {
 
 		return redisTemplate.execute(new RedisCallback<Properties>() {
 
+			@Override
 			public Properties doInRedis(RedisConnection connection) {
 				return connection.info();
 			}

@@ -9,9 +9,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @PropertySource(value = { "file:conf/manage.properties" }, encoding = "utf-8")
 @EnableScheduling
-public class TQManagerLauncher {
+public class TqManagerLauncher {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TQManagerLauncher.class, args);
+		SpringApplication.run(TqManagerLauncher.class, args);
 	}
 }

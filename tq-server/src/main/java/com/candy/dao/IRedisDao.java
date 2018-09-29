@@ -10,7 +10,7 @@ public interface IRedisDao {
 	 * 查询所有redis服务器
 	 * @return
 	 */
-	List<RedisServerEntity> findAllServer();
+	List<RedisServerEntity> listAllServer();
 	
 	/**
 	 * 根据id查询redis-server-entity
@@ -23,7 +23,7 @@ public interface IRedisDao {
 	 * 修改RedisServerEntity
 	 * @param rse
 	 */
-	void modifyServer(RedisServerEntity rse);
+	void updateServer(RedisServerEntity rse);
 	
 	/**
 	 * 删除redis entity
@@ -50,8 +50,11 @@ public interface IRedisDao {
 	 */
 	List<RedisResult> findAllResult();
 	
+	
 	/**
+	 *
 	 * 删除检查结果
+	 * @param id
 	 */
 	void deleteResult(String id);
 	

@@ -32,10 +32,10 @@ public class RedisDaoImpl implements IRedisDao, IOperationTask{
 	private static final String RESULT_KEY = "redis-result";
 	
 	@Autowired
-	private TQRedisClient redisClient;
+	private TqRedisClient redisClient;
 	
 	@Override
-	public List<RedisServerEntity> findAllServer() {
+	public List<RedisServerEntity> listAllServer() {
 		List<RedisServerEntity> res = Lists.newArrayList();
 		
 		Map<Object, Object> resFromDb = redisClient.entries(SERVER_KEY);
@@ -53,7 +53,7 @@ public class RedisDaoImpl implements IRedisDao, IOperationTask{
 	}
 
 	@Override
-	public void modifyServer(RedisServerEntity rse) {
+	public void updateServer(RedisServerEntity rse) {
 		addServer(rse);
 	}
 
@@ -68,6 +68,7 @@ public class RedisDaoImpl implements IRedisDao, IOperationTask{
 		return rse.getId();
 	}
 	
+	@Override
 	public void handleTask(String message)
 	{
 		OperationTask rt = JSON.parseObject(message, OperationTask.class);

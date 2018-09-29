@@ -5,7 +5,7 @@ import java.util.Date;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
-public class JSONMessage
+public class JsonMessage
 {
     private static final int JSON_RESULT_SUCCESS = ErrorCodeEnum.SUCCESS.getCode();
 
@@ -16,44 +16,44 @@ public class JSONMessage
     private JSONObject data;
     private Date time = null;
 
-    protected JSONMessage()
+    protected JsonMessage()
     {
         
     }
 
-    private JSONMessage(int code, String rdesc)
+    private JsonMessage(int code, String rdesc)
     {
         this.code = code;
         this.rdesc = rdesc;
     }
 
-    public static JSONMessage createSuccess()
+    public static JsonMessage createSuccess()
     {
-        JSONMessage jsonResult = new JSONMessage(JSON_RESULT_SUCCESS, null);
+        JsonMessage jsonResult = new JsonMessage(JSON_RESULT_SUCCESS, null);
         return jsonResult;
     }
 
-    public static JSONMessage createSuccess(String rdesc)
+    public static JsonMessage createSuccess(String rdesc)
     {
-        JSONMessage jsonResult = new JSONMessage(JSON_RESULT_SUCCESS, rdesc);
+        JsonMessage jsonResult = new JsonMessage(JSON_RESULT_SUCCESS, rdesc);
         return jsonResult;
     }
 
-    public static JSONMessage createFalied()
+    public static JsonMessage createFalied()
     {
-        JSONMessage jsonResult = new JSONMessage(JSON_RESULT_FAILED, "System sneak off.");
+        JsonMessage jsonResult = new JsonMessage(JSON_RESULT_FAILED, "System sneak off.");
         return jsonResult;
     }
 
-    public static JSONMessage createFalied(String rdesc)
+    public static JsonMessage createFalied(String rdesc)
     {
-        JSONMessage jsonResult = new JSONMessage(JSON_RESULT_FAILED, rdesc);
+        JsonMessage jsonResult = new JsonMessage(JSON_RESULT_FAILED, rdesc);
         return jsonResult;
     }
 
-    public static JSONMessage createFalied(int code, String rdesc)
+    public static JsonMessage createFalied(int code, String rdesc)
     {
-        JSONMessage jsonResult = new JSONMessage(code, rdesc);
+        JsonMessage jsonResult = new JsonMessage(code, rdesc);
         return jsonResult;
     }
 
@@ -87,7 +87,7 @@ public class JSONMessage
         this.rdesc = rdesc;
     }
 
-    public JSONMessage addData(JSONObject data)
+    public JsonMessage addData(JSONObject data)
     {
         if (data != null)
         {
@@ -96,6 +96,7 @@ public class JSONMessage
         return this;
     }
 
+    @Override
     public String toString()
     {
         this.time = new Date();

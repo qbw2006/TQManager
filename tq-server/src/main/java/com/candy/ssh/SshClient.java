@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.candy.dao.RedisServerEntity;
+import com.candy.utils.TqLog;
 
 import ch.ethz.ssh2.Connection;
 import ch.ethz.ssh2.Session;
@@ -62,7 +63,6 @@ public class SshClient {
                 // 打开连接
                 session = conn.openSession();
                 // 打开bash
-                //session.requestPTY("bash");
                 session.requestPTY("xterm", 90, 30, 0, 0, null);
 
                 // 启动shell
@@ -109,7 +109,7 @@ public class SshClient {
             this.out.flush();
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+        	TqLog.getErrorLog().error("", e);
             return false;
         }
 
@@ -126,7 +126,7 @@ public class SshClient {
             conn = null;
             writeThread.stopThread();
         } catch (Exception e) {
-            e.printStackTrace();
+            TqLog.getErrorLog().error("", e);
         }
     }
 

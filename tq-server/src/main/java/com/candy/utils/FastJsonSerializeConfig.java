@@ -9,17 +9,18 @@ import java.util.Date;
 
 public class FastJsonSerializeConfig
 {
-    private static final SerializeConfig mapping = new SerializeConfig();
+    private static final SerializeConfig MAPPING = new SerializeConfig();
 
     public static SerializeConfig get()
     {
-        return mapping;
+        return MAPPING;
     }
 
     static
     {
-        mapping.put(Date.class, new ObjectSerializer()
+        MAPPING.put(Date.class, new ObjectSerializer()
         {
+        	@Override
             public void write(JSONSerializer arg0, Object arg1, Object arg2, Type arg3, int arg4)
                     throws IOException
             {

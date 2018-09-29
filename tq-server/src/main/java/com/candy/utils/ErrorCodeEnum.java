@@ -3,7 +3,21 @@ package com.candy.utils;
 
 public enum ErrorCodeEnum
 {
-  SUCCESS, UNKNOWN, PARAM, EXIST, NOT_EXIST, DB, DB_NOTUNCATEGORIZED, CACHE, NETWORK, AUTH_NOLOGIN, AUTH_LOGINNOAUTH, AUTH_LOGINOUTTIME;
+	/**
+	 * 
+	 */
+  SUCCESS, 
+  UNKNOWN, 
+  PARAM,
+  EXIST, 
+  NOT_EXIST, 
+  DB, 
+  DB_NOTUNCATEGORIZED, 
+  CACHE, 
+  NETWORK,
+  AUTH_NOLOGIN, 
+  AUTH_LOGINNOAUTH,
+  AUTH_LOGINOUTTIME;
 
   private int code;
   private String msg;

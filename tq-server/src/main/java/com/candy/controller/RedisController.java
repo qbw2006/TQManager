@@ -15,7 +15,7 @@ import com.candy.dao.RedisResult;
 import com.candy.dao.RedisServerEntity;
 import com.candy.service.OperationTask;
 import com.candy.service.RedisService;
-import com.candy.utils.JSONMessage;
+import com.candy.utils.JsonMessage;
 import com.candy.utils.TqLog;
 
 @RestController
@@ -33,7 +33,7 @@ public class RedisController {
 		JSONObject json = new JSONObject();
 		json.put("health", res);
 		
-		return JSONMessage.createSuccess().addData(json).toString();
+		return JsonMessage.createSuccess().addData(json).toString();
 	}
 	
 	@RequestMapping(value= "/task", method = RequestMethod.POST)
@@ -42,7 +42,7 @@ public class RedisController {
 		TqLog.getDailyLog().info("receive a task, task = {}", ot);
 
 		rService.pubRedisTask(ot);
-		return JSONMessage.createSuccess("创建任务成功，任务 = " + JSON.toJSONString(ot)).toString();
+		return JsonMessage.createSuccess("创建任务成功，任务 = " + JSON.toJSONString(ot)).toString();
 		
 	}
 	
@@ -55,7 +55,7 @@ public class RedisController {
 		JSONObject res = new JSONObject();
 		res.put("id", id);
 		
-		return JSONMessage.createSuccess().addData(res).toString();
+		return JsonMessage.createSuccess().addData(res).toString();
 	}
 
 	@RequestMapping(value= "/", method = RequestMethod.PUT)
@@ -64,7 +64,7 @@ public class RedisController {
 		TqLog.getDailyLog().info("modify server, server = {}", rse);
 		rService.modifyServer(rse);
 		
-		return JSONMessage.createSuccess().toString();
+		return JsonMessage.createSuccess().toString();
 	}
 	
 	@RequestMapping(value= "/{id:.+}", method = RequestMethod.DELETE)
@@ -79,7 +79,7 @@ public class RedisController {
 		JSONObject res = new JSONObject();
 		res.put("id", id);
 		
-		return JSONMessage.createSuccess().addData(res).toString();
+		return JsonMessage.createSuccess().addData(res).toString();
 	}
 	
 }
