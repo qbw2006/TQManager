@@ -16,9 +16,11 @@
     "axios": "^0.18.0",
     "element-ui": "^2.4.6",
     "font-awesome": "^4.7.0",
+    "highcharts": "^6.1.4",
     "jquery": "^3.3.1",
     "vue": "^2.5.2",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vue2-highcharts": "^1.2.5"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
