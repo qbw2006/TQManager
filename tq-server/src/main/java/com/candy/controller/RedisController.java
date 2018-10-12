@@ -22,64 +22,70 @@ import com.candy.utils.TqLog;
 @RequestMapping("/tqmanager/redis")
 public class RedisController {
 
-	@Autowired
-	private RedisService rService;
-	
-	@RequestMapping(value= "/health", method = RequestMethod.GET)
-	public String healthInfo()
-	{
-		List<RedisResult> res = rService.healthInfo();
-		
-		JSONObject json = new JSONObject();
-		json.put("health", res);
-		
-		return JsonMessage.createSuccess().addData(json).toString();
-	}
-	
-	@RequestMapping(value= "/task", method = RequestMethod.POST)
-	public String pubRedisTask(@Validated OperationTask ot)
-	{
-		TqLog.getDailyLog().info("receive a task, task = {}", ot);
+    @Autowired
+    private RedisService rService;
 
-		rService.pubRedisTask(ot);
-		return JsonMessage.createSuccess("创建任务成功，任务 = " + JSON.toJSONString(ot)).toString();
-		
-	}
-	
-	@RequestMapping(method = RequestMethod.POST)
-	public String addServer(@Validated RedisServerEntity rse)
-	{
-		TqLog.getDailyLog().info("add server, server = {}", rse);
-		String id = rService.addServer(rse);
-		
-		JSONObject res = new JSONObject();
-		res.put("id", id);
-		
-		return JsonMessage.createSuccess().addData(res).toString();
-	}
+    @RequestMapping(value = "/health", method = RequestMethod.GET)
+    public String healthInfo() {
+        List<RedisResult> res = rService.healthInfo();
 
-	@RequestMapping(value= "/", method = RequestMethod.PUT)
-	public String modifyServer(@Validated RedisServerEntity rse)
-	{
-		TqLog.getDailyLog().info("modify server, server = {}", rse);
-		rService.modifyServer(rse);
-		
-		return JsonMessage.createSuccess().toString();
-	}
-	
-	@RequestMapping(value= "/{id:.+}", method = RequestMethod.DELETE)
-	public String deleteServer(@PathVariable("id") String id)
-	{
-		TqLog.getDailyLog().info("delete server, id = {}", id);
-		//1.删除配置数据
-		rService.deleteServer(id);
-		//2.删除结果数据
-		rService.deleteResult(id);
-		
-		JSONObject res = new JSONObject();
-		res.put("id", id);
-		
-		return JsonMessage.createSuccess().addData(res).toString();
-	}
-	
+        JSONObject json = new JSONObject();
+        json.put("health", res);
+
+        return JsonMessage.createSuccess().addData(json).toString();
+    }
+
+    @RequestMapping(value = "/health/history/{id:.+}", method = RequestMethod.POST)
+    public String healthHistoryInfo(@PathVariable("id") String id) {
+        TqLog.getDailyLog().info("healthHistoryInfo, id = {}", id);
+        List<RedisResult> res = rService.healthHistoryInfo(id);
+
+        JSONObject json = new JSONObject();
+        json.put("health", res);
+
+        return JsonMessage.createSuccess().addData(json).toString();
+    }
+    
+    @RequestMapping(value = "/task", method = RequestMethod.POST)
+    public String pubRedisTask(@Validated OperationTask ot) {
+        TqLog.getDailyLog().info("receive a task, task = {}", ot);
+
+        rService.pubRedisTask(ot);
+        return JsonMessage.createSuccess("创建任务成功，任务 = " + JSON.toJSONString(ot)).toString();
+
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public String addServer(@Validated RedisServerEntity rse) {
+        TqLog.getDailyLog().info("add server, server = {}", rse);
+        String id = rService.addServer(rse);
+
+        JSONObject res = new JSONObject();
+        res.put("id", id);
+
+        return JsonMessage.createSuccess().addData(res).toString();
+    }
+
+    @RequestMapping(value = "/", method = RequestMethod.PUT)
+    public String modifyServer(@Validated RedisServerEntity rse) {
+        TqLog.getDailyLog().info("modify server, server = {}", rse);
+        rService.modifyServer(rse);
+
+        return JsonMessage.createSuccess().toString();
+    }
+
+    @RequestMapping(value = "/{id:.+}", method = RequestMethod.DELETE)
+    public String deleteServer(@PathVariable("id") String id) {
+        TqLog.getDailyLog().info("delete server, id = {}", id);
+        // 1.删除配置数据
+        rService.deleteServer(id);
+        // 2.删除结果数据
+        rService.deleteResult(id);
+
+        JSONObject res = new JSONObject();
+        res.put("id", id);
+
+        return JsonMessage.createSuccess().addData(res).toString();
+    }
+
 }

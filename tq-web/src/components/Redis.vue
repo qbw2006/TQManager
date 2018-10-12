@@ -139,7 +139,9 @@
             </el-form>
         </el-dialog>
         
-        <RedisServerPanel :visible.sync="dialogTableVisible"></RedisServerPanel>
+        <redis-server-history :show="dialogTableVisible" :redis-id="redisId"></redis-server-history>
+        
+        <!--<redis-server-history></redis-server-history>-->
         
         <el-dialog width="50%" :visible.sync="shellVisible" @close="closeShell()">
             <div id="xterm-container"></div>
@@ -154,10 +156,10 @@
     import { Terminal } from 'xterm'
     import * as fit from 'xterm/lib/addons/fit/fit'
     import * as attach from 'xterm/lib/addons/attach/attach'
-    import RedisServerPanel from './RedisServerPanel'
+    import redisServerHistory from './RedisServerHistory'
     export default {
         components: {
-            RedisServerPanel
+            redisServerHistory
         },        
         data() {
             return {
@@ -167,6 +169,7 @@
                 shellVisible: false,
                 webSocket: null,
                 detail: [],
+                redisId: "",
 
                 form: {
                     name: '',
@@ -246,7 +249,6 @@
         beforeMount() {
             var self = this;
             setInterval(myajax, 10000);
-
             function myajax() {
                 self.$http.get("/tqmanager/redis/health").then(function(res) {
                     self.items = res.data.data.health;
@@ -300,7 +302,7 @@
 
             detailInfo(row, event) {
                 this.dialogTableVisible = true;
-                this.detail = row.info;
+                this.redisId = row.id;
             },
             openForm(formName) {
                 if(this.$refs[formName] !== undefined) {
